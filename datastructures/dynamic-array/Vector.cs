@@ -39,7 +39,7 @@ namespace test
         {
             if(size == capacity)
             {
-                DoubleVectorSize();
+                Resize(2);
             }
 
             array[size] = item;
@@ -50,7 +50,7 @@ namespace test
         {
             if(size == capacity)
             {
-                DoubleVectorSize();
+                Resize(2);
             }
 
             array = ShiftArrayValuesRight(0);
@@ -68,7 +68,7 @@ namespace test
             }
             if(size == capacity)
             {
-                DoubleVectorSize();
+                Resize(2);
             }
 
             array = ShiftArrayValuesRight(index);
@@ -81,8 +81,12 @@ namespace test
         {
             T item = array[size - 1];
             array[size - 1] = default(T);
-
             size--;
+            
+            if((double) capacity / size < 0.25)
+            {
+                Resize(0.5);
+            }
 
             return item;            
         }
@@ -90,8 +94,42 @@ namespace test
         public void Delete(int index)
         {
             ShiftArrayValuesLeft(index);
-
+            array[size - 1] = default(T);
             size--;
+
+            if((double) capacity / size < 0.25)
+            {
+                Resize(0.5);
+            }
+        }
+
+        public void Remove(T item)
+        {
+            int index = 0;
+            while(index < size && size != 0)
+            {
+                if(array[index].Equals(item))
+                {
+                    Delete(index);
+                }
+                else
+                {
+                    index++;
+                }
+            }
+        }
+
+        public int Find(T item)
+        {
+            for(int i = 0; i < size; i++)
+            {
+                if(array[i].Equals(item)) 
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
         private T[] ShiftArrayValuesRight(int index)
@@ -110,19 +148,22 @@ namespace test
             {
                 array[i - 1] = array[i];
             }
+
+            return array;
         }
 
-        private void DoubleVectorSize()
+        private void Resize(double capacityMultiplier)
         {
             T[] tempArray = array;
-            array = new T[capacity * 2];
+            int newCapacity = Convert.ToInt32(capacity * capacityMultiplier);
+            array = new T[newCapacity];
             
             for(int i = 0; i < size; i++)
             {
                 array[i] = tempArray[i];
             }
             
-            this.capacity *= 2;
+            this.capacity = newCapacity;
         }
     }
 }

@@ -83,7 +83,7 @@ namespace test
             array[size - 1] = default(T);
             size--;
             
-            if((double) capacity / size < 0.25)
+            if(size / (double) capacity < 0.25)
             {
                 Resize(0.5);
             }
@@ -97,7 +97,7 @@ namespace test
             array[size - 1] = default(T);
             size--;
 
-            if((double) capacity / size < 0.25)
+            if(size / (double) capacity < 0.25)
             {
                 Resize(0.5);
             }
